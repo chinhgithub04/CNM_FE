@@ -13,13 +13,14 @@ import type { Response } from '@/types/common';
 
 export const useLogin = () => {
   const navigate = useNavigate();
-  const { setToken } = useAuthContext();
+  const { setToken, setUser } = useAuthContext();
 
   return useMutation<Response<Token>, Error, LoginRequest>({
     mutationFn: loginUser,
     onSuccess: (response) => {
       if (response.code === '200' && response.data) {
         setToken(response.data.access_token);
+        setUser(response.data);
         toast.success('Login successful!', {
           description: 'Welcome back!',
         });
@@ -40,7 +41,7 @@ export const useLogin = () => {
 
 export const useRegister = () => {
   const navigate = useNavigate();
-  const { setToken } = useAuthContext();
+  const { setToken, setUser } = useAuthContext();
 
   const loginMutation = useMutation<
     Response<Token>,
@@ -51,6 +52,7 @@ export const useRegister = () => {
     onSuccess: (response) => {
       if (response.code === '200' && response.data) {
         setToken(response.data.access_token);
+        setUser(response.data);
         toast.success('Account created successfully!', {
           description: 'Welcome!',
         });

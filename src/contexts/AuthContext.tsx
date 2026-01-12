@@ -1,10 +1,13 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import apiClient from '@/services/apiClient.ts';
+import type { Token } from '@/types/auth';
 
 interface AuthContextType {
   token: string | null;
+  user: Token | null;
   isAuthenticated: boolean;
   setToken: (token: string | null) => void;
+  setUser: (user: Token | null) => void;
   logout: () => void;
 }
 
@@ -22,6 +25,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return null;
   });
 
+  const [user, setUserState] = useState<Token | null>(() => {
+    const storedUser = localStorage.getItem('user_data');
+    if (storedUser) {
+      try {
+        return JSON.parse(storedUser);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  });
+
   const setToken = (newToken: string | null) => {
     setTokenState(newToken);
     if (newToken) {
@@ -33,14 +48,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const setUser = (newUser: Token | null) => {
+    setUserState(newUser);
+    if (newUser) {
+      localStorage.setItem('user_data', JSON.stringify(newUser));
+    } else {
+      localStorage.removeItem('user_data');
+    }
+  };
+
   const logout = () => {
     setToken(null);
+    setUser(null);
   };
 
   const isAuthenticated = !!token;
 
   return (
-    <AuthContext.Provider value={{ token, isAuthenticated, setToken, logout }}>
+    <AuthContext.Provider
+      value={{ token, user, isAuthenticated, setToken, setUser, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
