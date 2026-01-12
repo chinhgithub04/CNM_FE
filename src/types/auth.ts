@@ -4,6 +4,11 @@ export interface LoginRequest {
 }
 
 export interface Token {
+  FullName: string;
+  UserName: string;
+  Email: string;
+  AvatarUrl: string | null;
+  Roles: string;
   access_token: string;
   token_type: string;
 }

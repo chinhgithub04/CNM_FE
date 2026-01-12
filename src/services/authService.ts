@@ -23,18 +23,3 @@ export const registerUser = async (
   );
   return response.data;
 };
-
-export const refreshToken = async (token: string): Promise<Response<Token>> => {
-  const response = await apiClient.post<Response<Token>>(
-    '/auth/refresh-token',
-    { token }
-  );
-  return response.data;
-};
-
-export const revokeToken = async (token: string): Promise<Response<null>> => {
-  const response = await apiClient.post<Response<null>>('/auth/revoke-token', {
-    token,
-  });
-  return response.data;
-};
