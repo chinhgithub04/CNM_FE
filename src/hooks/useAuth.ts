@@ -24,7 +24,7 @@ export const useLogin = () => {
         toast.success('Login successful!', {
           description: 'Welcome back!',
         });
-        navigate('/');
+        // Navigation will be handled by PublicOnlyRoute based on role
       } else {
         toast.error('Login failed', {
           description: response.message || 'Please check your credentials.',
@@ -56,7 +56,7 @@ export const useRegister = () => {
         toast.success('Account created successfully!', {
           description: 'Welcome!',
         });
-        navigate('/');
+        // Navigation will be handled by PublicOnlyRoute based on role
       }
     },
   });

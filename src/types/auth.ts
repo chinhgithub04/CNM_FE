@@ -8,7 +8,7 @@ export interface Token {
   UserName: string;
   Email: string;
   AvatarUrl: string | null;
-  Roles: string;
+  Role: string;
   access_token: string;
   token_type: string;
 }
