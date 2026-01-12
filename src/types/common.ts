@@ -1,9 +1,7 @@
 export interface Response<T> {
   data: T | null;
-  isSuccess: boolean;
+  code: string;
   message: string;
-  statusCode: number;
-  errors: string[] | null;
 }
 
 export interface PagedResponse<T> {

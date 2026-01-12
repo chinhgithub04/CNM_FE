@@ -1,24 +1,43 @@
 export interface LoginRequest {
-  email: string;
-  password: string;
+  Email: string;
+  Password: string;
 }
 
-export interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-  expiresAt: string;
-  userId: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  avatarPublicId: string | null;
-  roles: string[];
+export interface Token {
+  access_token: string;
+  token_type: string;
 }
 
 export interface RegisterRequest {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
+  FullName: string;
+  UserName: string;
+  Email: string;
+  Password: string;
+  ConfirmPassword: string;
+}
+
+export interface UserResponse {
+  Id: string;
+  FullName: string;
+  UserName: string | null;
+  Email: string | null;
+  EmailConfirmed: boolean;
+  PhoneNumberConfirmed: boolean;
+  AccessFailedCount: number;
+  LockoutEnd: string | null;
+  Status: number;
+  Roles: Role[];
+}
+
+export interface Role {
+  Id: string;
+  Name: string;
+  NormalizedName: string | null;
+}
+
+export interface UserMeResponse {
+  FullName: string;
+  UserName: string | null;
+  Email: string | null;
+  PhoneNumber: string | null;
 }

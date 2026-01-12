@@ -1,9 +1,6 @@
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'sonner';
-import { loginUser } from '@/services/authService';
-import { useAuth } from '@/contexts/AuthContext';
+import { Link } from 'react-router-dom';
+import { useLogin } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,43 +13,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import type { LoginRequest, LoginResponse } from '@/types/auth';
-import type { Response } from '@/types/common';
+import type { LoginRequest } from '@/types/auth';
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginRequest>();
 
-  const loginMutation = useMutation<
-    Response<LoginResponse>,
-    Error,
-    LoginRequest
-  >({
-    mutationFn: loginUser,
-    onSuccess: (response) => {
-      if (response.isSuccess && response.data) {
-        login(response.data);
-        toast.success('Login successful!', {
-          description: `Welcome back, ${response.data.firstName}!`,
-        });
-        navigate('/');
-      } else {
-        toast.error('Login failed', {
-          description: response.message || 'Please check your credentials.',
-        });
-      }
-    },
-    onError: (error) => {
-      toast.error('Login failed', {
-        description: error.message || 'An unexpected error occurred.',
-      });
-    },
-  });
+  const loginMutation = useLogin();
 
   const onSubmit = (data: LoginRequest) => {
     loginMutation.mutate(data);
@@ -70,12 +40,12 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
             <div className='space-y-2'>
-              <Label htmlFor='email'>Email</Label>
+              <Label htmlFor='Email'>Email</Label>
               <Input
-                id='email'
+                id='Email'
                 type='email'
                 placeholder='your@email.com'
-                {...register('email', {
+                {...register('Email', {
                   required: 'Email is required',
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -83,19 +53,19 @@ export default function LoginPage() {
                   },
                 })}
               />
-              {errors.email && (
+              {errors.Email && (
                 <p className='text-sm text-destructive'>
-                  {errors.email.message}
+                  {errors.Email.message}
                 </p>
               )}
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='password'>Password</Label>
+              <Label htmlFor='Password'>Password</Label>
               <PasswordInput
-                id='password'
+                id='Password'
                 placeholder='••••••••'
-                {...register('password', {
+                {...register('Password', {
                   required: 'Password is required',
                   minLength: {
                     value: 6,
@@ -103,9 +73,9 @@ export default function LoginPage() {
                   },
                 })}
               />
-              {errors.password && (
+              {errors.Password && (
                 <p className='text-sm text-destructive'>
-                  {errors.password.message}
+                  {errors.Password.message}
                 </p>
               )}
             </div>

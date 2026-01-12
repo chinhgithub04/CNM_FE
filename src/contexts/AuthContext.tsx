@@ -1,71 +1,46 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import apiClient from '../services/apiClient.ts';
-import type { LoginResponse } from '../types/auth.ts';
+import apiClient from '@/services/apiClient.ts';
 
 interface AuthContextType {
-  user: LoginResponse | null;
+  token: string | null;
   isAuthenticated: boolean;
-  login: (userData: LoginResponse) => void;
+  setToken: (token: string | null) => void;
   logout: () => void;
-  updateUser: (userData: Partial<LoginResponse>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<LoginResponse | null>(() => {
-    const storedAuth = localStorage.getItem('auth');
-
-    if (storedAuth) {
-      try {
-        const userData: LoginResponse = JSON.parse(storedAuth);
-        apiClient.defaults.headers.common[
-          'Authorization'
-        ] = `Bearer ${userData.accessToken}`;
-        return userData;
-      } catch (error) {
-        console.error('Failed to parse stored auth:', error);
-        localStorage.removeItem('auth');
-        return null;
-      }
+  const [token, setTokenState] = useState<string | null>(() => {
+    const storedToken = localStorage.getItem('access_token');
+    if (storedToken) {
+      apiClient.defaults.headers.common[
+        'Authorization'
+      ] = `Bearer ${storedToken}`;
+      return storedToken;
     }
     return null;
   });
 
-  const handleSetUser = (userData: LoginResponse | null) => {
-    setUser(userData);
-    if (userData) {
-      localStorage.setItem('auth', JSON.stringify(userData));
-      apiClient.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${userData.accessToken}`;
+  const setToken = (newToken: string | null) => {
+    setTokenState(newToken);
+    if (newToken) {
+      localStorage.setItem('access_token', newToken);
+      apiClient.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
     } else {
-      localStorage.removeItem('auth');
+      localStorage.removeItem('access_token');
       delete apiClient.defaults.headers.common['Authorization'];
     }
   };
 
-  const login = (userData: LoginResponse) => {
-    handleSetUser(userData);
-  };
-
   const logout = () => {
-    handleSetUser(null);
+    setToken(null);
   };
 
-  const updateUser = (userData: Partial<LoginResponse>) => {
-    if (user) {
-      const updatedUser = { ...user, ...userData };
-      handleSetUser(updatedUser);
-    }
-  };
-
-  const isAuthenticated = !!user;
+  const isAuthenticated = !!token;
 
   return (
-    <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logout, updateUser }}
-    >
+    <AuthContext.Provider value={{ token, isAuthenticated, setToken, logout }}>
       {children}
     </AuthContext.Provider>
   );

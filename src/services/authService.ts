@@ -1,35 +1,31 @@
 import type {
   LoginRequest,
-  LoginResponse,
+  Token,
   RegisterRequest,
-} from '../types/auth';
-import type { Response } from '../types/common';
+  UserResponse,
+} from '@/types/auth';
+import type { Response } from '@/types/common';
 import apiClient from './apiClient';
 
 export const loginUser = async (
   data: LoginRequest
-): Promise<Response<LoginResponse>> => {
-  const response = await apiClient.post<Response<LoginResponse>>(
-    '/auth/login',
-    data
-  );
+): Promise<Response<Token>> => {
+  const response = await apiClient.post<Response<Token>>('/login', data);
   return response.data;
 };
 
 export const registerUser = async (
   data: RegisterRequest
-): Promise<Response<LoginResponse>> => {
-  const response = await apiClient.post<Response<LoginResponse>>(
-    '/auth/register',
+): Promise<Response<UserResponse>> => {
+  const response = await apiClient.post<Response<UserResponse>>(
+    '/register',
     data
   );
   return response.data;
 };
 
-export const refreshToken = async (
-  token: string
-): Promise<Response<LoginResponse>> => {
-  const response = await apiClient.post<Response<LoginResponse>>(
+export const refreshToken = async (token: string): Promise<Response<Token>> => {
+  const response = await apiClient.post<Response<Token>>(
     '/auth/refresh-token',
     { token }
   );

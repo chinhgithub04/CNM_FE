@@ -1,9 +1,6 @@
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'sonner';
-import { registerUser } from '@/services/authService';
-import { useAuth } from '@/contexts/AuthContext';
+import { Link } from 'react-router-dom';
+import { useRegister } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,12 +13,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import type { RegisterRequest, LoginResponse } from '@/types/auth';
-import type { Response } from '@/types/common';
+import type { RegisterRequest } from '@/types/auth';
 
 export default function RegisterPage() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -29,33 +23,9 @@ export default function RegisterPage() {
     formState: { errors },
   } = useForm<RegisterRequest>();
 
-  const password = watch('password');
+  const Password = watch('Password');
 
-  const registerMutation = useMutation<
-    Response<LoginResponse>,
-    Error,
-    RegisterRequest
-  >({
-    mutationFn: registerUser,
-    onSuccess: (response) => {
-      if (response.isSuccess && response.data) {
-        login(response.data);
-        toast.success('Account created successfully!', {
-          description: `Welcome, ${response.data.firstName}!`,
-        });
-        navigate('/');
-      } else {
-        toast.error('Registration failed', {
-          description: response.message || 'Please try again.',
-        });
-      }
-    },
-    onError: (error) => {
-      toast.error('Registration failed', {
-        description: error.message || 'An unexpected error occurred.',
-      });
-    },
-  });
+  const registerMutation = useRegister();
 
   const onSubmit = (data: RegisterRequest) => {
     registerMutation.mutate(data);
@@ -74,57 +44,55 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-            <div className='grid grid-cols-2 gap-4'>
-              <div className='space-y-2'>
-                <Label htmlFor='firstName'>First name</Label>
-                <Input
-                  id='firstName'
-                  type='text'
-                  placeholder='John'
-                  {...register('firstName', {
-                    required: 'First name is required',
-                    minLength: {
-                      value: 2,
-                      message: 'First name must be at least 2 characters',
-                    },
-                  })}
-                />
-                {errors.firstName && (
-                  <p className='text-sm text-destructive'>
-                    {errors.firstName.message}
-                  </p>
-                )}
-              </div>
-
-              <div className='space-y-2'>
-                <Label htmlFor='lastName'>Last name</Label>
-                <Input
-                  id='lastName'
-                  type='text'
-                  placeholder='Doe'
-                  {...register('lastName', {
-                    required: 'Last name is required',
-                    minLength: {
-                      value: 2,
-                      message: 'Last name must be at least 2 characters',
-                    },
-                  })}
-                />
-                {errors.lastName && (
-                  <p className='text-sm text-destructive'>
-                    {errors.lastName.message}
-                  </p>
-                )}
-              </div>
+            <div className='space-y-2'>
+              <Label htmlFor='FullName'>Full Name</Label>
+              <Input
+                id='FullName'
+                type='text'
+                placeholder='John Doe'
+                {...register('FullName', {
+                  required: 'Full name is required',
+                  minLength: {
+                    value: 2,
+                    message: 'Full name must be at least 2 characters',
+                  },
+                })}
+              />
+              {errors.FullName && (
+                <p className='text-sm text-destructive'>
+                  {errors.FullName.message}
+                </p>
+              )}
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='email'>Email</Label>
+              <Label htmlFor='UserName'>Username</Label>
               <Input
-                id='email'
+                id='UserName'
+                type='text'
+                placeholder='johndoe'
+                {...register('UserName', {
+                  required: 'Username is required',
+                  minLength: {
+                    value: 3,
+                    message: 'Username must be at least 3 characters',
+                  },
+                })}
+              />
+              {errors.UserName && (
+                <p className='text-sm text-destructive'>
+                  {errors.UserName.message}
+                </p>
+              )}
+            </div>
+
+            <div className='space-y-2'>
+              <Label htmlFor='Email'>Email</Label>
+              <Input
+                id='Email'
                 type='email'
                 placeholder='your@email.com'
-                {...register('email', {
+                {...register('Email', {
                   required: 'Email is required',
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -132,19 +100,19 @@ export default function RegisterPage() {
                   },
                 })}
               />
-              {errors.email && (
+              {errors.Email && (
                 <p className='text-sm text-destructive'>
-                  {errors.email.message}
+                  {errors.Email.message}
                 </p>
               )}
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='password'>Password</Label>
+              <Label htmlFor='Password'>Password</Label>
               <PasswordInput
-                id='password'
+                id='Password'
                 placeholder='••••••••'
-                {...register('password', {
+                {...register('Password', {
                   required: 'Password is required',
                   minLength: {
                     value: 6,
@@ -152,27 +120,27 @@ export default function RegisterPage() {
                   },
                 })}
               />
-              {errors.password && (
+              {errors.Password && (
                 <p className='text-sm text-destructive'>
-                  {errors.password.message}
+                  {errors.Password.message}
                 </p>
               )}
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='confirmPassword'>Confirm password</Label>
+              <Label htmlFor='ConfirmPassword'>Confirm password</Label>
               <PasswordInput
-                id='confirmPassword'
+                id='ConfirmPassword'
                 placeholder='••••••••'
-                {...register('confirmPassword', {
+                {...register('ConfirmPassword', {
                   required: 'Please confirm your password',
                   validate: (value) =>
-                    value === password || 'Passwords do not match',
+                    value === Password || 'Passwords do not match',
                 })}
               />
-              {errors.confirmPassword && (
+              {errors.ConfirmPassword && (
                 <p className='text-sm text-destructive'>
-                  {errors.confirmPassword.message}
+                  {errors.ConfirmPassword.message}
                 </p>
               )}
             </div>

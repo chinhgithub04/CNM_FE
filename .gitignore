@@ -25,3 +25,6 @@ dist-ssr
 
 # Environment files
 .env
+
+backend_CNM
+*.md
