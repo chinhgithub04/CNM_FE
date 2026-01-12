@@ -14,9 +14,9 @@ export interface ProductType {
   ImageUrl: string | null;
   ProductId: number;
   Status: number;
-  Price?: string; // API returns as string
+  Price?: string;
   Number?: number;
-  price_item?: PriceItem | null; // Optional for backward compatibility
+  price_item?: PriceItem | null;
 }
 
 export interface ProductImage {

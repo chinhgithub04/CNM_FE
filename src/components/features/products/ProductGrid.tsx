@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useProducts } from '@/hooks/useProducts';
 import { Button } from '@/components/ui/button';
 import { getProductImage } from '@/utils/cloudinary';
@@ -89,7 +90,11 @@ function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className='group cursor-pointer'>
+    <Link
+      to={`/products/${product.Id}`}
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      className='group cursor-pointer block'
+    >
       <div className='relative overflow-hidden rounded-lg aspect-square bg-muted mb-3'>
         {imageUrl ? (
           <img
@@ -113,6 +118,6 @@ function ProductCard({ product }: { product: Product }) {
         </h3>
         <p className='text-sm font-bold text-primary'>{getPriceDisplay()}</p>
       </div>
-    </div>
+    </Link>
   );
 }
