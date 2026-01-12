@@ -1,4 +1,5 @@
 import { CategorySlider } from '@/components/features/categories/CategorySlider';
+import { ProductGrid } from '@/components/features/products/ProductGrid';
 
 export default function HomePage() {
   return (
@@ -20,6 +21,9 @@ export default function HomePage() {
 
       {/* Category Slider */}
       <CategorySlider />
+
+      {/* Product Grid */}
+      <ProductGrid />
     </div>
   );
 }

@@ -17,7 +17,20 @@ export const buildCloudinaryUrl = (
 ): string | null => {
   if (!imageUrl) return null;
 
-  const image = cld.image(imageUrl);
+  let publicId: string;
+
+  if (imageUrl.includes('cloudinary.com')) {
+    const urlParts = imageUrl.split('/upload/');
+    if (urlParts.length > 1) {
+      publicId = urlParts[1];
+    } else {
+      return imageUrl;
+    }
+  } else {
+    publicId = imageUrl;
+  }
+
+  const image = cld.image(publicId);
 
   if (options?.width && options?.height) {
     image.resize(
