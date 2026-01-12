@@ -1,8 +1,17 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Minus, Plus } from 'lucide-react';
 import { useProduct } from '@/hooks/useProducts';
+import { useAddToCart } from '@/hooks/useCart';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { ProductSlider } from '@/components/features/products/ProductSlider';
 import { getProductImage } from '@/utils/cloudinary';
 import { formatCurrency } from '@/utils/formatters';
@@ -11,13 +20,16 @@ import type { ProductType } from '@/types/product';
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { data, isLoading, error } = useProduct(Number(id));
+  const addToCartMutation = useAddToCart();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState<ProductType | null>(
     null
   );
   const [quantity, setQuantity] = useState(1);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -90,6 +102,23 @@ export default function ProductDetailPage() {
     if (newQuantity >= 1 && newQuantity <= maxQuantity) {
       setQuantity(newQuantity);
     }
+  };
+
+  // Handle add to cart
+  const handleAddToCart = () => {
+    if (!currentVariant) return;
+
+    addToCartMutation.mutate(
+      {
+        ProductTypeId: currentVariant.Id,
+        Quantity: quantity,
+      },
+      {
+        onSuccess: () => {
+          setIsDialogOpen(true);
+        },
+      }
+    );
   };
 
   return (
@@ -208,8 +237,15 @@ export default function ProductDetailPage() {
               </div>
 
               {/* Add to Cart Button */}
-              <Button variant='outline' className='flex-1'>
-                Thêm vào giỏ hàng
+              <Button
+                variant='outline'
+                className='flex-1'
+                onClick={handleAddToCart}
+                disabled={addToCartMutation.isPending || !currentVariant}
+              >
+                {addToCartMutation.isPending
+                  ? 'Đang thêm...'
+                  : 'Thêm vào giỏ hàng'}
               </Button>
 
               {/* Buy Now Button */}
@@ -227,6 +263,24 @@ export default function ProductDetailPage() {
             )}
           </div>
         </div>
+
+        {/* Add to Cart Success Dialog */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Thành công!</DialogTitle>
+              <DialogDescription>
+                Sản phẩm đã được thêm vào giỏ hàng của bạn.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant='outline' onClick={() => setIsDialogOpen(false)}>
+                Tiếp tục mua sắm
+              </Button>
+              <Button onClick={() => navigate('/cart')}>Đi đến giỏ hàng</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

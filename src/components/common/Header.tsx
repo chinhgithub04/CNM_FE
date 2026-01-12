@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ShoppingCart, User, LogOut, Settings, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +12,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCartContext } from '@/contexts/CartContext';
 
 export default function Header() {
   const { isAuthenticated, user, logout } = useAuth();
+  const { cartItemCount } = useCartContext();
+
+  console.log('Header - cartItemCount:', cartItemCount);
 
   const getInitials = (name: string) => {
     return name
@@ -57,9 +62,17 @@ export default function Header() {
         {/* Right side actions */}
         <div className='flex items-center space-x-4'>
           {/* Cart */}
-          <Button variant='ghost' size='icon' asChild>
+          <Button variant='ghost' size='icon' asChild className='relative'>
             <Link to='/cart'>
               <ShoppingCart className='h-5 w-5' />
+              {cartItemCount > 0 && (
+                <Badge
+                  variant='destructive'
+                  className='absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs'
+                >
+                  {cartItemCount > 99 ? '99+' : cartItemCount}
+                </Badge>
+              )}
             </Link>
           </Button>
 
