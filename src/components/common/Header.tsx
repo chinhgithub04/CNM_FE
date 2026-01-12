@@ -35,22 +35,22 @@ export default function Header() {
         {/* Navigation */}
         <nav className='hidden md:flex items-center space-x-6'>
           <Link
-            to='/campaigns'
+            to='/'
             className='text-sm font-medium text-foreground/60 transition-colors hover:text-foreground'
           >
-            Campaigns
+            Trang chủ
           </Link>
           <Link
             to='/products'
             className='text-sm font-medium text-foreground/60 transition-colors hover:text-foreground'
           >
-            Products
+            Sản phẩm
           </Link>
           <Link
             to='/about'
             className='text-sm font-medium text-foreground/60 transition-colors hover:text-foreground'
           >
-            About
+            Về chúng tôi
           </Link>
         </nav>
 
@@ -97,35 +97,35 @@ export default function Header() {
                 <DropdownMenuItem asChild>
                   <Link to='/profile' className='cursor-pointer'>
                     <User className='mr-2 h-4 w-4' />
-                    <span>Profile</span>
+                    <span>Hồ sơ</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to='/orders' className='cursor-pointer'>
                     <Package className='mr-2 h-4 w-4' />
-                    <span>My Orders</span>
+                    <span>Đơn hàng của tôi</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to='/settings' className='cursor-pointer'>
                     <Settings className='mr-2 h-4 w-4' />
-                    <span>Settings</span>
+                    <span>Cài đặt</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout} className='cursor-pointer'>
                   <LogOut className='mr-2 h-4 w-4' />
-                  <span>Log out</span>
+                  <span>Đăng xuất</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <div className='flex items-center space-x-2'>
               <Button variant='ghost' size='sm' asChild>
-                <Link to='/login'>Sign in</Link>
+                <Link to='/login'>Đăng nhập</Link>
               </Button>
               <Button size='sm' asChild>
-                <Link to='/register'>Sign up</Link>
+                <Link to='/register'>Đăng ký</Link>
               </Button>
             </div>
           )}

@@ -32,9 +32,11 @@ export default function LoginPage() {
     <div className='flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8'>
       <Card className='w-full max-w-md'>
         <CardHeader className='space-y-1'>
-          <CardTitle className='text-center text-3xl'>Welcome back</CardTitle>
+          <CardTitle className='text-center text-3xl'>
+            Chào mừng trở lại
+          </CardTitle>
           <CardDescription className='text-center'>
-            Enter your credentials to access your account
+            Nhập thông tin đăng nhập để truy cập tài khoản
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -46,10 +48,10 @@ export default function LoginPage() {
                 type='email'
                 placeholder='your@email.com'
                 {...register('Email', {
-                  required: 'Email is required',
+                  required: 'Email là bắt buộc',
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'Invalid email address',
+                    message: 'Địa chỉ email không hợp lệ',
                   },
                 })}
               />
@@ -61,15 +63,15 @@ export default function LoginPage() {
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='Password'>Password</Label>
+              <Label htmlFor='Password'>Mật khẩu</Label>
               <PasswordInput
                 id='Password'
                 placeholder='••••••••'
                 {...register('Password', {
-                  required: 'Password is required',
+                  required: 'Mật khẩu là bắt buộc',
                   minLength: {
                     value: 6,
-                    message: 'Password must be at least 6 characters',
+                    message: 'Mật khẩu phải có ít nhất 6 ký tự',
                   },
                 })}
               />
@@ -85,18 +87,18 @@ export default function LoginPage() {
               className='w-full'
               disabled={loginMutation.isPending}
             >
-              {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
+              {loginMutation.isPending ? 'Đang đăng nhập...' : 'Đăng nhập'}
             </Button>
           </form>
         </CardContent>
         <CardFooter className='flex flex-col space-y-4'>
           <div className='text-center text-sm text-muted-foreground'>
-            Don't have an account?{' '}
+            Chưa có tài khoản?{' '}
             <Link
               to='/register'
               className='font-medium text-primary hover:underline'
             >
-              Sign up
+              Đăng ký
             </Link>
           </div>
         </CardFooter>

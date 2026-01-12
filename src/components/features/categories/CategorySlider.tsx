@@ -27,7 +27,7 @@ export function CategorySlider() {
     return (
       <div className='py-12'>
         <div className='container mx-auto px-4'>
-          <h2 className='text-3xl font-bold mb-8'>Shop by Category</h2>
+          <h2 className='text-3xl font-bold mb-8'>Danh mục</h2>
           <div className='flex gap-4 overflow-hidden'>
             {[...Array(6)].map((_, i) => (
               <div
@@ -45,7 +45,7 @@ export function CategorySlider() {
     return (
       <div className='py-12'>
         <div className='container mx-auto px-4'>
-          <p className='text-destructive'>Failed to load categories</p>
+          <p className='text-destructive'>Không thể tải danh mục</p>
         </div>
       </div>
     );
@@ -60,7 +60,7 @@ export function CategorySlider() {
   return (
     <div className='py-12'>
       <div className='container mx-auto px-4'>
-        <h2 className='text-3xl font-bold mb-8'>Shop by Category</h2>
+        <h2 className='text-3xl font-bold mb-8'>Danh mục</h2>
 
         <div className='relative'>
           <Button

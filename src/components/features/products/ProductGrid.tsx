@@ -11,7 +11,7 @@ export function ProductGrid() {
     return (
       <div className='py-12'>
         <div className='container mx-auto px-4'>
-          <h2 className='text-3xl font-bold mb-8'>Featured Products</h2>
+          <h2 className='text-3xl font-bold mb-8'>Sản phẩm nổi bật</h2>
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6'>
             {[...Array(10)].map((_, i) => (
               <div key={i} className='space-y-3'>
@@ -30,7 +30,7 @@ export function ProductGrid() {
     return (
       <div className='py-12'>
         <div className='container mx-auto px-4'>
-          <p className='text-destructive'>Failed to load products</p>
+          <p className='text-destructive'>Không thể tải sản phẩm</p>
         </div>
       </div>
     );
@@ -46,8 +46,8 @@ export function ProductGrid() {
     <div className='py-12'>
       <div className='container mx-auto px-4'>
         <div className='flex items-center justify-between mb-8'>
-          <h2 className='text-3xl font-bold'>Featured Products</h2>
-          <Button variant='outline'>Show All</Button>
+          <h2 className='text-3xl font-bold'>Sản phẩm nổi bật</h2>
+          <Button variant='outline'>Xem tất cả</Button>
         </div>
 
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6'>
@@ -67,7 +67,7 @@ function ProductCard({ product }: { product: Product }) {
 
   const getPriceDisplay = () => {
     if (!product.ProductTypes || product.ProductTypes.length === 0) {
-      return 'Price not available';
+      return 'Giá không có sẵn';
     }
 
     const prices = product.ProductTypes.map((pt) => {
@@ -81,7 +81,7 @@ function ProductCard({ product }: { product: Product }) {
     }).filter((price): price is number => price !== null && !isNaN(price));
 
     if (prices.length === 0) {
-      return 'Price not available';
+      return 'Giá không có sẵn';
     }
 
     const minPrice = Math.min(...prices);
