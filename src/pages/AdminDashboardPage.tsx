@@ -1,5 +1,7 @@
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Package, ShoppingCart, Users, DollarSign } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Package, ShoppingCart, Users, DollarSign, FolderTree } from 'lucide-react';
 
 interface StatCardProps {
   title: string;
@@ -28,40 +30,58 @@ function StatCard({ title, value, icon: Icon, description }: StatCardProps) {
 }
 
 export default function AdminDashboardPage() {
+  const navigate = useNavigate();
+
   return (
     <div className='space-y-6'>
-      <div>
-        <h1 className='text-3xl font-bold text-gray-900'>Dashboard</h1>
-        <p className='text-gray-600 mt-2'>
-          Welcome back! Here's an overview of your store.
-        </p>
+      <div className='flex items-center justify-between'>
+        <div>
+          <h1 className='text-3xl font-bold text-gray-900'>Thống kê</h1>
+          <p className='text-gray-600 mt-2'>
+            Chào mừng trở lại! Đây là tổng quan về cửa hàng của bạn.
+          </p>
+        </div>
+        <div className='flex gap-2'>
+          <Button onClick={() => navigate('/admin/categories')}>
+            <FolderTree className='mr-2 h-4 w-4' />
+            Danh mục
+          </Button>
+          <Button onClick={() => navigate('/admin/products')} variant='outline'>
+            <Package className='mr-2 h-4 w-4' />
+            Sản phẩm
+          </Button>
+          <Button onClick={() => navigate('/admin/accounts')} variant='outline'>
+            <Users className='mr-2 h-4 w-4' />
+            Tài khoản
+          </Button>
+        </div>
       </div>
 
       {/* Stats Grid */}
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
         <StatCard
-          title='Total Revenue'
-          value='$45,231.89'
+          title='Tổng Doanh Thu'
+          value='45.231.890 VNĐ'
           icon={DollarSign}
-          description='+20.1% from last month'
+          description='+20.1% so với tháng trước'
         />
         <StatCard
-          title='Total Orders'
+          title='Tổng Đơn Hàng'
           value='2,350'
           icon={ShoppingCart}
-          description='+15.3% from last month'
+          description='+15.3% so với tháng trước'
         />
         <StatCard
-          title='Products'
+          title='Sản Phẩm'
           value='345'
           icon={Package}
-          description='12 out of stock'
+          description='12 hết hàng'
         />
         <StatCard
-          title='Customers'
+          title='Khách Hàng'
           value='1,234'
           icon={Users}
-          description='+8.2% from last month'
+          description='+8.2% so với tháng trước'
         />
       </div>
 
@@ -69,41 +89,41 @@ export default function AdminDashboardPage() {
       <div className='grid gap-4 md:grid-cols-2'>
         <Card>
           <CardHeader>
-            <CardTitle>Recent Orders</CardTitle>
+            <CardTitle>Đơn Hàng Gần Đây</CardTitle>
           </CardHeader>
           <CardContent>
             <div className='space-y-4'>
               <div className='flex items-center justify-between'>
                 <div>
                   <p className='text-sm font-medium text-gray-900'>
-                    Order #1234
+                    Đơn hàng #1234
                   </p>
-                  <p className='text-xs text-gray-500'>2 minutes ago</p>
+                  <p className='text-xs text-gray-500'>2 phút trước</p>
                 </div>
                 <span className='rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800'>
-                  Completed
+                  Hoàn thành
                 </span>
               </div>
               <div className='flex items-center justify-between'>
                 <div>
                   <p className='text-sm font-medium text-gray-900'>
-                    Order #1233
+                    Đơn hàng #1233
                   </p>
-                  <p className='text-xs text-gray-500'>15 minutes ago</p>
+                  <p className='text-xs text-gray-500'>15 phút trước</p>
                 </div>
                 <span className='rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800'>
-                  Processing
+                  Đang xử lý
                 </span>
               </div>
               <div className='flex items-center justify-between'>
                 <div>
                   <p className='text-sm font-medium text-gray-900'>
-                    Order #1232
+                    Đơn hàng #1232
                   </p>
-                  <p className='text-xs text-gray-500'>1 hour ago</p>
+                  <p className='text-xs text-gray-500'>1 giờ trước</p>
                 </div>
                 <span className='rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800'>
-                  Shipped
+                  Đã giao
                 </span>
               </div>
             </div>
@@ -112,41 +132,41 @@ export default function AdminDashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Low Stock Alert</CardTitle>
+            <CardTitle>Cảnh Báo Tồn Kho Thấp</CardTitle>
           </CardHeader>
           <CardContent>
             <div className='space-y-4'>
               <div className='flex items-center justify-between'>
                 <div>
                   <p className='text-sm font-medium text-gray-900'>
-                    Product Name 1
+                    Sản phẩm 1
                   </p>
-                  <p className='text-xs text-gray-500'>Only 5 left</p>
+                  <p className='text-xs text-gray-500'>Chỉ còn 5</p>
                 </div>
                 <span className='rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800'>
-                  Low Stock
+                  Tồn kho thấp
                 </span>
               </div>
               <div className='flex items-center justify-between'>
                 <div>
                   <p className='text-sm font-medium text-gray-900'>
-                    Product Name 2
+                    Sản phẩm 2
                   </p>
-                  <p className='text-xs text-gray-500'>Only 3 left</p>
+                  <p className='text-xs text-gray-500'>Chỉ còn 3</p>
                 </div>
                 <span className='rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800'>
-                  Low Stock
+                  Tồn kho thấp
                 </span>
               </div>
               <div className='flex items-center justify-between'>
                 <div>
                   <p className='text-sm font-medium text-gray-900'>
-                    Product Name 3
+                    Sản phẩm 3
                   </p>
-                  <p className='text-xs text-gray-500'>Out of stock</p>
+                  <p className='text-xs text-gray-500'>Hết hàng</p>
                 </div>
                 <span className='rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-800'>
-                  Out of Stock
+                  Hết hàng
                 </span>
               </div>
             </div>

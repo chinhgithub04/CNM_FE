@@ -7,6 +7,10 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
+import CategoriesPage from './pages/CategoriesPage';
+import { ProductsPage } from './pages/ProductsPage';
+import AccountsPage from './pages/AccountsPage';
+import InvoicesPage from './pages/InvoicesPage';
 
 function App() {
   return (
@@ -24,7 +28,10 @@ function App() {
       <Route element={<AdminProtectedRoute />}>
         <Route element={<AdminLayout />}>
           <Route path='/admin' element={<AdminDashboardPage />} />
-          {/* Add more admin routes here */}
+          <Route path='/admin/categories' element={<CategoriesPage />} />
+          <Route path='/admin/products' element={<ProductsPage />} />
+          <Route path='/admin/accounts' element={<AccountsPage />} />
+          <Route path='/admin/invoices' element={<InvoicesPage />} />
         </Route>
       </Route>
     </Routes>

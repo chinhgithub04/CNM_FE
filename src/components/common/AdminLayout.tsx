@@ -2,12 +2,13 @@ import { Outlet, Link, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Package,
-  ShoppingCart,
+  FileText,
   Users,
   Settings,
   LogOut,
   Menu,
   X,
+  FolderTree,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -30,29 +31,29 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Thống kê',
     href: '/admin',
     icon: LayoutDashboard,
   },
   {
-    title: 'Products',
+    title: 'Danh Mục',
+    href: '/admin/categories',
+    icon: FolderTree,
+  },
+  {
+    title: 'Sản Phẩm',
     href: '/admin/products',
     icon: Package,
   },
   {
-    title: 'Orders',
-    href: '/admin/orders',
-    icon: ShoppingCart,
-  },
-  {
-    title: 'Customers',
-    href: '/admin/customers',
+    title: 'Tài khoản',
+    href: '/admin/accounts',
     icon: Users,
   },
   {
-    title: 'Settings',
-    href: '/admin/settings',
-    icon: Settings,
+    title: 'Hoá đơn',
+    href: '/admin/invoices',
+    icon: FileText,
   },
 ];
 
@@ -79,9 +80,8 @@ export default function AdminLayout() {
     <div className='flex h-screen overflow-hidden bg-gray-100'>
       {/* Sidebar */}
       <aside
-        className={`${
-          sidebarOpen ? 'w-64' : 'w-0'
-        } flex flex-col border-r bg-white transition-all duration-300 ease-in-out lg:w-64`}
+        className={`${sidebarOpen ? 'w-64' : 'w-0'
+          } flex flex-col border-r bg-white transition-all duration-300 ease-in-out lg:w-64`}
       >
         <div className='flex h-16 items-center justify-between border-b px-6'>
           <h1 className='text-xl font-bold text-gray-900'>Admin Panel</h1>
