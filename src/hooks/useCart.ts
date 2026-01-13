@@ -45,7 +45,6 @@ export const useUpdateCartItem = () => {
     }) => updateCartItem(productTypeId, quantity),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cart'] });
-      toast.success('Đã cập nhật giỏ hàng');
     },
     onError: (error: any) => {
       toast.error(

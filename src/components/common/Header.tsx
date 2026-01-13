@@ -18,8 +18,6 @@ export default function Header() {
   const { isAuthenticated, user, logout } = useAuth();
   const { cartItemCount } = useCartContext();
 
-  console.log('Header - cartItemCount:', cartItemCount);
-
   const getInitials = (name: string) => {
     return name
       .split(' ')
