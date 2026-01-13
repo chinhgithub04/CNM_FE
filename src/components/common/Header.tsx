@@ -46,10 +46,10 @@ export default function Header() {
             Trang chủ
           </Link>
           <Link
-            to='/products'
+            to='/shop'
             className='text-sm font-medium text-foreground/60 transition-colors hover:text-foreground'
           >
-            Sản phẩm
+            Cửa hàng
           </Link>
           <Link
             to='/about'
