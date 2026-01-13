@@ -1,11 +1,12 @@
-import { Link } from 'react-router-dom';
-import { ShoppingCart, Eye } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom'; 
+import { ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '@/utils/formatters';
-import { useCart } from '@/hooks/useCart'; 
 import { useAddToCart } from '@/hooks/useCart';
+import { useAuth } from '@/contexts/AuthContext'; 
+import { toast } from 'sonner'; 
 import type { Product } from '@/types/product';
 
 interface ShopProductGridProps {
@@ -14,11 +15,12 @@ interface ShopProductGridProps {
 }
 
 export function ShopProductGrid({ products, isLoading }: ShopProductGridProps) {
+  const { isAuthenticated } = useAuth(); 
+  const navigate = useNavigate();
   const addToCartMutation = useAddToCart();
 
   const getDisplayPrice = (product: Product) => {
     if (!product.ProductTypes || product.ProductTypes.length === 0) return 'Liên hệ';
-    
     const prices = product.ProductTypes.map(pt => {
         const priceVal = pt.Price || pt.price_item?.Price;
         return priceVal ? Number(priceVal) : null;
@@ -34,14 +36,34 @@ export function ShopProductGrid({ products, isLoading }: ShopProductGridProps) {
      return variantImg || productImg || '/placeholder.png'; 
   };
 
-  const handleQuickAdd = (e: React.MouseEvent, product: Product) => {
+  const handleQuickAdd = async (e: React.MouseEvent, product: Product) => {
     e.preventDefault(); 
+    e.stopPropagation();
+
+    if (!isAuthenticated) {
+      toast.error("Bạn chưa đăng nhập!", {
+        description: "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.",
+        action: {
+          label: "Đăng nhập ngay",
+          onClick: () => navigate("/login"),
+        },
+      });
+      return;
+    }
+
     const firstVariant = product.ProductTypes?.[0];
     if (firstVariant) {
-        addToCartMutation.mutate({
-            ProductTypeId: firstVariant.Id,
-            Quantity: 1
-        });
+        toast.promise(
+            addToCartMutation.mutateAsync({
+                ProductTypeId: firstVariant.Id,
+                Quantity: 1
+            }),
+            {
+                loading: 'Đang thêm vào giỏ hàng...',
+                success: `Đã thêm ${product.Name} vào giỏ hàng!`,
+                error: 'Không thể thêm vào giỏ. Vui lòng thử lại.',
+            }
+        );
     }
   };
 
@@ -78,10 +100,15 @@ export function ShopProductGrid({ products, isLoading }: ShopProductGridProps) {
                  {product.Status === 1 && <Badge className="bg-green-500">Mới</Badge>}
               </div>
               
-              {/* Overlay button action */}
               <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full transition-transform duration-300 group-hover:translate-y-0 flex gap-2 justify-center bg-white/10 backdrop-blur-sm">
-                  <Button size="sm" className="w-full" onClick={(e) => handleQuickAdd(e, product)}>
-                      <ShoppingCart className="mr-2 h-4 w-4" /> Thêm
+                  <Button 
+                    size="sm" 
+                    className="w-full" 
+                    onClick={(e) => handleQuickAdd(e, product)}
+                    disabled={addToCartMutation.isPending} 
+                  >
+                    <ShoppingCart className="mr-2 h-4 w-4" /> 
+                    {addToCartMutation.isPending ? 'Đang thêm...' : 'Thêm vào giỏ'}
                   </Button>
               </div>
             </div>
