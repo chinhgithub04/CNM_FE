@@ -1,10 +1,21 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import type { Category, CreateCategoryRequest } from '@/types/category';
+import type {
+  Category,
+  CreateCategoryRequest,
+  UpdateCategoryRequest,
+} from '@/types/category';
 import { useCreateCategory, useUpdateCategory } from '@/hooks/useCategories';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -34,13 +45,18 @@ export function CategoryFormDialog({
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<CreateCategoryRequest>({
+    setValue,
+    watch,
+  } = useForm<UpdateCategoryRequest>({
     defaultValues: {
       Name: category?.Name || '',
       Description: category?.Description || '',
       ImageUrl: category?.ImageUrl || '',
+      Status: category?.Status ?? 1,
     },
   });
+
+  const status = watch('Status');
 
   useEffect(() => {
     if (category) {
@@ -48,18 +64,21 @@ export function CategoryFormDialog({
         Name: category.Name,
         Description: category.Description || '',
         ImageUrl: category.ImageUrl || '',
+        Status: category.Status ?? 1,
       });
     } else {
       reset({
         Name: '',
         Description: '',
         ImageUrl: '',
+        Status: 1,
       });
     }
   }, [category, reset]);
 
-  const onSubmit = (data: CreateCategoryRequest) => {
+  const onSubmit = (data: UpdateCategoryRequest) => {
     if (isEditing) {
+      // Update mode - use UpdateCategoryRequest
       updateMutation.mutate(
         { id: category.Id, data },
         {
@@ -70,7 +89,14 @@ export function CategoryFormDialog({
         }
       );
     } else {
-      createMutation.mutate(data, {
+      // Create mode - ensure all required fields are present
+      const createData: CreateCategoryRequest = {
+        Name: data.Name!,  // Non-null assertion since form validates this
+        Description: data.Description!,
+        ImageUrl: data.ImageUrl!,
+      };
+
+      createMutation.mutate(createData, {
         onSuccess: () => {
           onOpenChange(false);
           reset();
@@ -165,6 +191,23 @@ export function CategoryFormDialog({
                 {errors.ImageUrl.message}
               </p>
             )}
+          </div>
+
+          {/* Status Selector */}
+          <div className='space-y-2'>
+            <Label htmlFor='Status'>Trạng thái</Label>
+            <Select
+              value={status?.toString()}
+              onValueChange={(value) => setValue('Status', parseInt(value))}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder='Chọn trạng thái' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='1'>Hiện</SelectItem>
+                <SelectItem value='0'>Ẩn</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <DialogFooter>
