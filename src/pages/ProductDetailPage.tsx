@@ -249,7 +249,31 @@ export default function ProductDetailPage() {
               </Button>
 
               {/* Buy Now Button */}
-              <Button className='flex-1'>Mua ngay</Button>
+              <Button
+                className='flex-1'
+                onClick={() => {
+                  if (!currentVariant || !product) return;
+
+                  const checkoutItems = [
+                    {
+                      ProductTypeId: currentVariant.Id,
+                      ProductId: product.Id,
+                      ProductTypeName: currentVariant.Name,
+                      ProductName: product.Name,
+                      ImageUrl: currentVariant.ImageUrl,
+                      Quantity: quantity,
+                      UnitPrice: currentVariant.Price
+                        ? parseFloat(currentVariant.Price)
+                        : currentVariant.price_item?.Price || 0,
+                    },
+                  ];
+
+                  navigate('/checkout', { state: { items: checkoutItems } });
+                }}
+                disabled={!currentVariant}
+              >
+                Mua ngay
+              </Button>
             </div>
 
             {/* Product Description */}
