@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { useCart, useUpdateCartItem, useRemoveCartItem } from '@/hooks/useCart';
 import { useProduct } from '@/hooks/useProducts';
@@ -169,6 +169,7 @@ function CartItemRow({
 }
 
 export default function CartPage() {
+  const navigate = useNavigate();
   const { data, isLoading, error } = useCart();
   const updateCartItemMutation = useUpdateCartItem();
   const removeCartItemMutation = useRemoveCartItem();
@@ -179,6 +180,28 @@ export default function CartPage() {
 
   const cart = data?.data;
   const cartItems = cart?.items || [];
+
+  // Handle checkout navigation
+  const handleCheckout = () => {
+    if (selectedItems.size === 0) return;
+
+    const checkoutItems = cartItems
+      .filter(
+        (item) => item.ProductType && selectedItems.has(item.ProductType.Id)
+      )
+      .map((item) => ({
+        ProductTypeId: item.ProductType!.Id,
+        ProductId: item.ProductType!.ProductId,
+        ProductTypeName: item.ProductType!.Name,
+        ImageUrl: item.ProductType!.ImageUrl,
+        Quantity: item.Quantity,
+        UnitPrice: item.ProductType!.Price
+          ? parseFloat(item.ProductType!.Price)
+          : 0,
+      }));
+
+    navigate('/checkout', { state: { items: checkoutItems, fromCart: true } });
+  };
 
   // Toggle single item selection
   const toggleItemSelection = (productTypeId: number) => {
@@ -407,6 +430,7 @@ export default function CartPage() {
                 className='w-full'
                 size='lg'
                 disabled={selectedItems.size === 0 && cartItems.length > 0}
+                onClick={handleCheckout}
               >
                 Tiến hành thanh toán
               </Button>

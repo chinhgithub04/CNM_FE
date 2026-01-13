@@ -4,6 +4,8 @@ import PublicOnlyRoute from './components/common/PublicOnlyRoute';
 import HomePage from './pages/HomePage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 
@@ -15,6 +17,8 @@ function App() {
         <Route path='/' element={<HomePage />} />
         <Route path='/products/:id' element={<ProductDetailPage />} />
         <Route path='/cart' element={<CartPage />} />
+        <Route path='/checkout' element={<CheckoutPage />} />
+        <Route path='/payment-success' element={<PaymentSuccessPage />} />
         <Route element={<PublicOnlyRoute />}>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
