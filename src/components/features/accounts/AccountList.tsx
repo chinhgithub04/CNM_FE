@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pencil, Trash2, UserCheck, UserX } from 'lucide-react';
+import { Pencil, UserCheck, UserX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -10,16 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { useDeleteUser, useToggleUserStatus } from '@/hooks/useUsers';
-import { formatDate } from '@/lib/formatters';
+import { useToggleUserStatus } from '@/hooks/useUsers';
 import type { User } from '@/types/user';
 import { AccountFormDialog } from '@/components/features/accounts/AccountFormDialog';
 import {
@@ -39,23 +30,14 @@ interface AccountListProps {
 export function AccountList({ users }: AccountListProps) {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const deleteUserMutation = useDeleteUser();
   const toggleStatusMutation = useToggleUserStatus();
 
   const handleEdit = (user: User) => {
     setEditingUser(user);
     setIsEditDialogOpen(true);
-  };
-
-  const handleDelete = async () => {
-    if (deletingUserId) {
-      await deleteUserMutation.mutateAsync(deletingUserId);
-      setDeletingUserId(null);
-    }
   };
 
   const handleToggleStatus = async (userId: string, currentStatus: number) => {
@@ -90,7 +72,10 @@ export function AccountList({ users }: AccountListProps) {
 
   const getRoleDisplay = (roles: User['Roles']) => {
     if (!roles || roles.length === 0) return 'Người dùng';
-    return roles.map((r) => r.Name).join(', ');
+    const roleName = roles[0].Name;
+    if (roleName === 'Admin') return 'Quản trị viên';
+    if (roleName === 'Customer') return 'Người dùng';
+    return roleName;
   };
 
   if (users.length === 0) {
@@ -112,7 +97,6 @@ export function AccountList({ users }: AccountListProps) {
               <TableHead>Tên đăng nhập</TableHead>
               <TableHead>Vai trò</TableHead>
               <TableHead>Trạng thái</TableHead>
-              <TableHead>Ngày tạo</TableHead>
               <TableHead className='text-right'>Thao tác</TableHead>
             </TableRow>
           </TableHeader>
@@ -124,11 +108,16 @@ export function AccountList({ users }: AccountListProps) {
                 <TableCell>{user.UserName || 'N/A'}</TableCell>
                 <TableCell>{getRoleDisplay(user.Roles)}</TableCell>
                 <TableCell>{getStatusBadge(user.Status)}</TableCell>
-                <TableCell>
-                  {user.CreatedAt ? formatDate(user.CreatedAt) : 'N/A'}
-                </TableCell>
                 <TableCell className='text-right'>
                   <div className='flex justify-end gap-2'>
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      onClick={() => handleEdit(user)}
+                      title='Chỉnh sửa'
+                    >
+                      <Pencil className='h-4 w-4 text-blue-600' />
+                    </Button>
                     <Button
                       variant='ghost'
                       size='sm'
@@ -140,20 +129,6 @@ export function AccountList({ users }: AccountListProps) {
                       ) : (
                         <UserCheck className='h-4 w-4 text-green-600' />
                       )}
-                    </Button>
-                    <Button
-                      variant='ghost'
-                      size='sm'
-                      onClick={() => handleEdit(user)}
-                    >
-                      <Pencil className='h-4 w-4 text-blue-600' />
-                    </Button>
-                    <Button
-                      variant='ghost'
-                      size='sm'
-                      onClick={() => setDeletingUserId(user.Id)}
-                    >
-                      <Trash2 className='h-4 w-4 text-red-600' />
                     </Button>
                   </div>
                 </TableCell>
@@ -232,38 +207,6 @@ export function AccountList({ users }: AccountListProps) {
         onOpenChange={setIsEditDialogOpen}
         user={editingUser}
       />
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog
-        open={!!deletingUserId}
-        onOpenChange={() => setDeletingUserId(null)}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Xác nhận xóa</DialogTitle>
-            <DialogDescription>
-              Bạn có chắc chắn muốn xóa tài khoản này? Hành động này không thể
-              hoàn tác.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant='outline'
-              onClick={() => setDeletingUserId(null)}
-              disabled={deleteUserMutation.isPending}
-            >
-              Hủy
-            </Button>
-            <Button
-              variant='destructive'
-              onClick={handleDelete}
-              disabled={deleteUserMutation.isPending}
-            >
-              {deleteUserMutation.isPending ? 'Đang xóa...' : 'Xóa'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }
