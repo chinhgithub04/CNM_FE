@@ -1,46 +1,28 @@
-// Request types
-export interface ProductTypeInput {
-  Name: string;
-  Quantity: number;
-  ImageUrl?: string;
-  Price: number;
-  Number: number;
-}
+// Product types based on backend product_router.py
 
-export interface ProductImageInput {
-  Url: string;
-  Description: string;
-}
-
-export interface CreateProductRequest {
-  Name: string;
-  Description: string;
-  CreateAt: string;  // ISO date string - Required by backend
-  CategoryId: number;
-  Status?: number;
-  Images?: ProductImageInput[];
-  ProductTypes: ProductTypeInput[];  // Required by backend (min 1)
-}
-
-export interface UpdateProductRequest {
-  Name?: string;
-  Description?: string;
-  CategoryId?: number;
-  Status?: number;
-}
-
-// Response types
-export interface ProductImage {
+export interface PriceItem {
   Id: number;
-  ImageUrl: string;
-  ProductId: number;
+  Number: number;
+  Price: number;
+  ProductTypeId: number;
 }
 
 export interface ProductType {
   Id: number;
   Name: string;
-  Price: number;
-  Stock: number;
+  Quantity: number;
+  ImageUrl: string | null;
+  ProductId: number;
+  Status: number;
+  Price?: string;
+  Number?: number;
+  price_item?: PriceItem | null;
+}
+
+export interface ProductImage {
+  Id: number;
+  Url: string;
+  Description: string | null;
   ProductId: number;
 }
 
@@ -51,6 +33,31 @@ export interface Product {
   CreateAt: string;
   CategoryId: number;
   Status: number;
-  Images: ProductImage[];
   ProductTypes: ProductType[];
+  Images: ProductImage[];
+}
+
+export interface ProductCreate {
+  Name: string;
+  Description?: string;
+  CategoryId: number;
+  Status?: number;
+  Images?: {
+    Url: string;
+    Description?: string;
+  }[];
+  ProductTypes?: {
+    Name: string;
+    Quantity: number;
+    ImageUrl?: string;
+    Price?: number;
+    Number?: number;
+  }[];
+}
+
+export interface ProductUpdate {
+  Name?: string;
+  Description?: string;
+  CategoryId?: number;
+  Status?: number;
 }

@@ -9,7 +9,6 @@ import {
 } from '@/services/productService';
 import type { UpdateProductRequest } from '@/types/product';
 
-// Query hooks
 export const useProducts = () => {
   return useQuery({
     queryKey: ['products'],
@@ -26,7 +25,6 @@ export const useProductById = (id: number) => {
   });
 };
 
-// Mutation hooks
 export const useCreateProduct = () => {
   const queryClient = useQueryClient();
 

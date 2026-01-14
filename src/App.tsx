@@ -4,6 +4,10 @@ import AdminLayout from './components/common/AdminLayout';
 import PublicOnlyRoute from './components/common/PublicOnlyRoute';
 import AdminProtectedRoute from './components/common/AdminProtectedRoute';
 import HomePage from './pages/HomePage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
@@ -18,6 +22,10 @@ function App() {
       {/* Public routes with customer layout */}
       <Route element={<CustomerLayout />}>
         <Route path='/' element={<HomePage />} />
+        <Route path='/products/:id' element={<ProductDetailPage />} />
+        <Route path='/cart' element={<CartPage />} />
+        <Route path='/checkout' element={<CheckoutPage />} />
+        <Route path='/payment-success' element={<PaymentSuccessPage />} />
         <Route element={<PublicOnlyRoute />}>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />

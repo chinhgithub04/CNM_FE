@@ -19,19 +19,20 @@ export const useLogin = () => {
       if (response.code === '200' && response.data) {
         setToken(response.data.access_token);
         setUser(response.data);
-        toast.success('Login successful!', {
-          description: 'Welcome back!',
+        toast.success('Đăng nhập thành công!', {
+          description: 'Chào mừng trở lại!',
         });
         // Navigation will be handled by PublicOnlyRoute based on role
       } else {
-        toast.error('Login failed', {
-          description: response.message || 'Please check your credentials.',
+        toast.error('Đăng nhập thất bại', {
+          description:
+            response.message || 'Vui lòng kiểm tra thông tin đăng nhập.',
         });
       }
     },
     onError: (error) => {
-      toast.error('Login failed', {
-        description: error.message || 'An unexpected error occurred.',
+      toast.error('Đăng nhập thất bại', {
+        description: error.message || 'Đã xảy ra lỗi không mong muốn.',
       });
     },
   });
@@ -50,8 +51,8 @@ export const useRegister = () => {
       if (response.code === '200' && response.data) {
         setToken(response.data.access_token);
         setUser(response.data);
-        toast.success('Account created successfully!', {
-          description: 'Welcome!',
+        toast.success('Tạo tài khoản thành công!', {
+          description: 'Chào mừng!',
         });
         // Navigation will be handled by PublicOnlyRoute based on role
       }
@@ -68,14 +69,14 @@ export const useRegister = () => {
           Password: variables.Password,
         });
       } else {
-        toast.error('Registration failed', {
-          description: response.message || 'Please try again.',
+        toast.error('Đăng ký thất bại', {
+          description: response.message || 'Vui lòng thử lại.',
         });
       }
     },
     onError: (error) => {
-      toast.error('Registration failed', {
-        description: error.message || 'An unexpected error occurred.',
+      toast.error('Đăng ký thất bại', {
+        description: error.message || 'Đã xảy ra lỗi không mong muốn.',
       });
     },
   });

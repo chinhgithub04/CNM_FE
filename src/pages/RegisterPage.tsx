@@ -35,26 +35,24 @@ export default function RegisterPage() {
     <div className='flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8'>
       <Card className='w-full max-w-md'>
         <CardHeader className='space-y-1'>
-          <CardTitle className='text-center text-3xl'>
-            Create an account
-          </CardTitle>
+          <CardTitle className='text-center text-3xl'>Tạo tài khoản</CardTitle>
           <CardDescription className='text-center'>
-            Enter your information to get started
+            Nhập thông tin của bạn để bắt đầu
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
             <div className='space-y-2'>
-              <Label htmlFor='FullName'>Full Name</Label>
+              <Label htmlFor='FullName'>Họ và tên</Label>
               <Input
                 id='FullName'
                 type='text'
-                placeholder='John Doe'
+                placeholder='Nguyễn Văn A'
                 {...register('FullName', {
-                  required: 'Full name is required',
+                  required: 'Họ và tên là bắt buộc',
                   minLength: {
                     value: 2,
-                    message: 'Full name must be at least 2 characters',
+                    message: 'Họ và tên phải có ít nhất 2 ký tự',
                   },
                 })}
               />
@@ -66,16 +64,16 @@ export default function RegisterPage() {
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='UserName'>Username</Label>
+              <Label htmlFor='UserName'>Tên người dùng</Label>
               <Input
                 id='UserName'
                 type='text'
-                placeholder='johndoe'
+                placeholder='nguyenvana'
                 {...register('UserName', {
-                  required: 'Username is required',
+                  required: 'Tên người dùng là bắt buộc',
                   minLength: {
                     value: 3,
-                    message: 'Username must be at least 3 characters',
+                    message: 'Tên người dùng phải có ít nhất 3 ký tự',
                   },
                 })}
               />
@@ -93,10 +91,10 @@ export default function RegisterPage() {
                 type='email'
                 placeholder='your@email.com'
                 {...register('Email', {
-                  required: 'Email is required',
+                  required: 'Email là bắt buộc',
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'Invalid email address',
+                    message: 'Địa chỉ email không hợp lệ',
                   },
                 })}
               />
@@ -108,15 +106,15 @@ export default function RegisterPage() {
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='Password'>Password</Label>
+              <Label htmlFor='Password'>Mật khẩu</Label>
               <PasswordInput
                 id='Password'
                 placeholder='••••••••'
                 {...register('Password', {
-                  required: 'Password is required',
+                  required: 'Mật khẩu là bắt buộc',
                   minLength: {
                     value: 6,
-                    message: 'Password must be at least 6 characters',
+                    message: 'Mật khẩu phải có ít nhất 6 ký tự',
                   },
                 })}
               />
@@ -128,14 +126,14 @@ export default function RegisterPage() {
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='ConfirmPassword'>Confirm password</Label>
+              <Label htmlFor='ConfirmPassword'>Xác nhận mật khẩu</Label>
               <PasswordInput
                 id='ConfirmPassword'
                 placeholder='••••••••'
                 {...register('ConfirmPassword', {
-                  required: 'Please confirm your password',
+                  required: 'Vui lòng xác nhận mật khẩu',
                   validate: (value) =>
-                    value === Password || 'Passwords do not match',
+                    value === Password || 'Mật khẩu không khớp',
                 })}
               />
               {errors.ConfirmPassword && (
@@ -151,19 +149,19 @@ export default function RegisterPage() {
               disabled={registerMutation.isPending}
             >
               {registerMutation.isPending
-                ? 'Creating account...'
-                : 'Create account'}
+                ? 'Đang tạo tài khoản...'
+                : 'Tạo tài khoản'}
             </Button>
           </form>
         </CardContent>
         <CardFooter className='flex flex-col space-y-4'>
           <div className='text-center text-sm text-muted-foreground'>
-            Already have an account?{' '}
+            Đã có tài khoản?{' '}
             <Link
               to='/login'
               className='font-medium text-primary hover:underline'
             >
-              Sign in
+              Đăng nhập
             </Link>
           </div>
         </CardFooter>

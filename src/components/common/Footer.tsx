@@ -13,8 +13,7 @@ export default function Footer() {
               <span className='text-xl font-bold text-primary'>Merxly</span>
             </Link>
             <p className='text-sm text-muted-foreground'>
-              Your trusted marketplace for crowdfunding campaigns and exclusive
-              products.
+              Nền tảng đáng tin cậy cho mọi nhu cầu mua sắm trực tuyến.
             </p>
             <div className='flex space-x-4'>
               <a
@@ -52,14 +51,14 @@ export default function Footer() {
 
           {/* Shop */}
           <div className='space-y-4'>
-            <h3 className='text-sm font-semibold'>Shop</h3>
+            <h3 className='text-sm font-semibold'>Cửa hàng</h3>
             <ul className='space-y-2 text-sm'>
               <li>
                 <Link
                   to='/campaigns'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  Active Campaigns
+                  Chiến dịch đang hoạt động
                 </Link>
               </li>
               <li>
@@ -67,7 +66,7 @@ export default function Footer() {
                   to='/products'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  All Products
+                  Tất cả sản phẩm
                 </Link>
               </li>
               <li>
@@ -75,7 +74,7 @@ export default function Footer() {
                   to='/featured'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  Featured
+                  Nổi bật
                 </Link>
               </li>
               <li>
@@ -83,7 +82,7 @@ export default function Footer() {
                   to='/deals'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  Best Deals
+                  Ưu đãi tốt nhất
                 </Link>
               </li>
             </ul>
@@ -91,14 +90,14 @@ export default function Footer() {
 
           {/* Support */}
           <div className='space-y-4'>
-            <h3 className='text-sm font-semibold'>Support</h3>
+            <h3 className='text-sm font-semibold'>Hỗ trợ</h3>
             <ul className='space-y-2 text-sm'>
               <li>
                 <Link
                   to='/help'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  Help Center
+                  Trung tâm trợ giúp
                 </Link>
               </li>
               <li>
@@ -106,7 +105,7 @@ export default function Footer() {
                   to='/contact'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  Contact Us
+                  Liên hệ
                 </Link>
               </li>
               <li>
@@ -114,7 +113,7 @@ export default function Footer() {
                   to='/shipping'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  Shipping Info
+                  Thông tin vận chuyển
                 </Link>
               </li>
               <li>
@@ -122,7 +121,7 @@ export default function Footer() {
                   to='/returns'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  Returns
+                  Đổi trả
                 </Link>
               </li>
             </ul>
@@ -130,14 +129,14 @@ export default function Footer() {
 
           {/* Company */}
           <div className='space-y-4'>
-            <h3 className='text-sm font-semibold'>Company</h3>
+            <h3 className='text-sm font-semibold'>Công ty</h3>
             <ul className='space-y-2 text-sm'>
               <li>
                 <Link
                   to='/about'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  About Us
+                  Về chúng tôi
                 </Link>
               </li>
               <li>
@@ -145,7 +144,7 @@ export default function Footer() {
                   to='/careers'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  Careers
+                  Nghề nghiệp
                 </Link>
               </li>
               <li>
@@ -153,7 +152,7 @@ export default function Footer() {
                   to='/privacy'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  Privacy Policy
+                  Chính sách bảo mật
                 </Link>
               </li>
               <li>
@@ -161,7 +160,7 @@ export default function Footer() {
                   to='/terms'
                   className='text-muted-foreground hover:text-foreground transition-colors'
                 >
-                  Terms of Service
+                  Điều khoản dịch vụ
                 </Link>
               </li>
             </ul>
@@ -179,19 +178,19 @@ export default function Footer() {
               to='/privacy'
               className='hover:text-foreground transition-colors'
             >
-              Privacy
+              Bảo mật
             </Link>
             <Link
               to='/terms'
               className='hover:text-foreground transition-colors'
             >
-              Terms
+              Điều khoản
             </Link>
             <Link
               to='/cookies'
               className='hover:text-foreground transition-colors'
             >
-              Cookies
+              Cookie
             </Link>
           </div>
         </div>
