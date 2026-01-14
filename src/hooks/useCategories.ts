@@ -2,14 +2,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
   getCategories,
-  getCategoryById,
   createCategory,
   updateCategory,
   deleteCategory,
 } from '@/services/categoryService';
-import type { UpdateCategoryRequest } from '@/types/category';
+import type {
+  CreateCategoryRequest,
+  UpdateCategoryRequest,
+} from '@/types/category';
 
-// Query hooks
 export const useCategories = () => {
   return useQuery({
     queryKey: ['categories'],
@@ -18,30 +19,17 @@ export const useCategories = () => {
   });
 };
 
-export const useCategoryById = (id: number) => {
-  return useQuery({
-    queryKey: ['categories', id],
-    queryFn: () => getCategoryById(id),
-    enabled: !!id,
-  });
-};
-
-// Mutation hooks
 export const useCreateCategory = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createCategory,
-    onSuccess: (response) => {
+    mutationFn: (data: CreateCategoryRequest) => createCategory(data),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
-      toast.success('Tạo danh mục thành công!', {
-        description: response.message || 'Danh mục đã được thêm.',
-      });
+      toast.success('Tạo danh mục thành công');
     },
-    onError: (error: Error) => {
-      toast.error('Tạo danh mục thất bại', {
-        description: error.message || 'Đã xảy ra lỗi khi tạo danh mục.',
-      });
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || 'Không thể tạo danh mục');
     },
   });
 };
@@ -52,17 +40,14 @@ export const useUpdateCategory = () => {
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: UpdateCategoryRequest }) =>
       updateCategory(id, data),
-    onSuccess: (response, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
-      queryClient.invalidateQueries({ queryKey: ['categories', variables.id] });
-      toast.success('Cập nhật danh mục thành công!', {
-        description: response.message || 'Danh mục đã được cập nhật.',
-      });
+      toast.success('Cập nhật danh mục thành công');
     },
-    onError: (error: Error) => {
-      toast.error('Cập nhật danh mục thất bại', {
-        description: error.message || 'Đã xảy ra lỗi khi cập nhật danh mục.',
-      });
+    onError: (error: any) => {
+      toast.error(
+        error?.response?.data?.message || 'Không thể cập nhật danh mục'
+      );
     },
   });
 };
@@ -71,17 +56,13 @@ export const useDeleteCategory = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: deleteCategory,
-    onSuccess: (response) => {
+    mutationFn: (id: number) => deleteCategory(id),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
-      toast.success('Xóa danh mục thành công!', {
-        description: response.message || 'Danh mục đã được xóa.',
-      });
+      toast.success('Xóa danh mục thành công');
     },
-    onError: (error: Error) => {
-      toast.error('Xóa danh mục thất bại', {
-        description: error.message || 'Đã xảy ra lỗi khi xóa danh mục.',
-      });
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || 'Không thể xóa danh mục');
     },
   });
 };

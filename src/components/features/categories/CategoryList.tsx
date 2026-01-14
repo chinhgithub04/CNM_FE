@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
 import type { Category } from '@/types/category';
 import { useDeleteCategory } from '@/hooks/useCategories';
+import { getCategoryThumbnail } from '@/utils/cloudinary';
+import { formatShortDate } from '@/utils/formatters';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -40,14 +42,6 @@ export function CategoryList({ categories }: CategoryListProps) {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('vi-VN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-  };
-
   if (categories.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center py-12 text-center'>
@@ -65,7 +59,7 @@ export function CategoryList({ categories }: CategoryListProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className='w-[80px]'>Ảnh</TableHead>
+              <TableHead className='w-20'>Ảnh</TableHead>
               <TableHead>Tên</TableHead>
               <TableHead>Mô tả</TableHead>
               <TableHead>Ngày tạo</TableHead>
@@ -76,9 +70,9 @@ export function CategoryList({ categories }: CategoryListProps) {
             {categories.map((category) => (
               <TableRow key={category.Id}>
                 <TableCell>
-                  {category.ImageUrl ? (
+                  {getCategoryThumbnail(category.ImageUrl) ? (
                     <img
-                      src={category.ImageUrl}
+                      src={getCategoryThumbnail(category.ImageUrl)!}
                       alt={category.Name}
                       className='w-16 h-16 object-cover rounded-md border'
                     />
@@ -94,7 +88,7 @@ export function CategoryList({ categories }: CategoryListProps) {
                     <span className='text-gray-400 italic'>Không có mô tả</span>
                   )}
                 </TableCell>
-                <TableCell>{formatDate(category.CreateAt)}</TableCell>
+                <TableCell>{formatShortDate(category.CreateAt)}</TableCell>
                 <TableCell className='text-right'>
                   <div className='flex justify-end gap-2'>
                     <Button

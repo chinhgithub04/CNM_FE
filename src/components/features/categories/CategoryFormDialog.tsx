@@ -1,11 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import type {
-  Category,
-  CreateCategoryRequest,
-  UpdateCategoryRequest,
-} from '@/types/category';
+import type { Category } from '@/types/category';
 import { useCreateCategory, useUpdateCategory } from '@/hooks/useCategories';
+import { getCategoryThumbnail } from '@/utils/cloudinary';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -31,6 +28,13 @@ interface CategoryFormDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
+interface FormData {
+  Name: string;
+  Description: string;
+  Status: number;
+  Image?: FileList;
+}
+
 export function CategoryFormDialog({
   category,
   open,
@@ -39,6 +43,9 @@ export function CategoryFormDialog({
   const isEditing = !!category;
   const createMutation = useCreateCategory();
   const updateMutation = useUpdateCategory();
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    getCategoryThumbnail(category?.ImageUrl) || null
+  );
 
   const {
     register,
@@ -47,61 +54,91 @@ export function CategoryFormDialog({
     reset,
     setValue,
     watch,
-  } = useForm<UpdateCategoryRequest>({
+  } = useForm<FormData>({
     defaultValues: {
       Name: category?.Name || '',
       Description: category?.Description || '',
-      ImageUrl: category?.ImageUrl || '',
       Status: category?.Status ?? 1,
     },
   });
 
   const status = watch('Status');
+  const imageFile = watch('Image');
 
   useEffect(() => {
     if (category) {
       reset({
         Name: category.Name,
         Description: category.Description || '',
-        ImageUrl: category.ImageUrl || '',
         Status: category.Status ?? 1,
       });
+      setImagePreview(getCategoryThumbnail(category.ImageUrl) || null);
     } else {
       reset({
         Name: '',
         Description: '',
-        ImageUrl: '',
         Status: 1,
       });
+      setImagePreview(null);
     }
   }, [category, reset]);
 
-  const onSubmit = (data: UpdateCategoryRequest) => {
+  useEffect(() => {
+    if (imageFile && imageFile.length > 0) {
+      const file = imageFile[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }, [imageFile]);
+
+  const onSubmit = (data: FormData) => {
     if (isEditing) {
-      // Update mode - use UpdateCategoryRequest
+      // Update mode
+      const updateData: any = {
+        Name: data.Name,
+        Description: data.Description,
+        Status: data.Status,
+      };
+
+      // Only include Image if a new file was selected
+      if (data.Image && data.Image.length > 0) {
+        updateData.Image = data.Image[0];
+      }
+
       updateMutation.mutate(
-        { id: category.Id, data },
+        { id: category.Id, data: updateData },
         {
           onSuccess: () => {
             onOpenChange(false);
             reset();
+            setImagePreview(null);
           },
         }
       );
     } else {
-      // Create mode - ensure all required fields are present
-      const createData: CreateCategoryRequest = {
-        Name: data.Name!,  // Non-null assertion since form validates this
-        Description: data.Description!,
-        ImageUrl: data.ImageUrl!,
-      };
+      // Create mode - Image is required
+      if (!data.Image || data.Image.length === 0) {
+        return;
+      }
 
-      createMutation.mutate(createData, {
-        onSuccess: () => {
-          onOpenChange(false);
-          reset();
+      createMutation.mutate(
+        {
+          Name: data.Name,
+          Description: data.Description,
+          Status: data.Status,
+          Image: data.Image[0],
         },
-      });
+        {
+          onSuccess: () => {
+            onOpenChange(false);
+            reset();
+            setImagePreview(null);
+          },
+        }
+      );
     }
   };
 
@@ -171,25 +208,30 @@ export function CategoryFormDialog({
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='ImageUrl'>
-              URL hình ảnh <span className='text-red-500'>*</span>
+            <Label htmlFor='Image'>
+              Hình ảnh {!isEditing && <span className='text-red-500'>*</span>}
             </Label>
             <Input
-              id='ImageUrl'
-              {...register('ImageUrl', {
-                required: 'URL hình ảnh là bắt buộc',
-                pattern: {
-                  value: /^(https?:\/\/|data:image\/)/,
-                  message: 'URL hình ảnh không hợp lệ (phải bắt đầu bằng http:// hoặc https://)',
-                },
+              id='Image'
+              type='file'
+              accept='image/*'
+              className='cursor-pointer'
+              {...register('Image', {
+                required: isEditing ? false : 'Hình ảnh là bắt buộc',
               })}
-              placeholder='Nhập URL hình ảnh (ví dụ: https://example.com/image.jpg)'
               disabled={isPending}
             />
-            {errors.ImageUrl && (
-              <p className='text-sm text-red-600'>
-                {errors.ImageUrl.message}
-              </p>
+            {errors.Image && (
+              <p className='text-sm text-red-600'>{errors.Image.message}</p>
+            )}
+            {imagePreview && (
+              <div className='mt-2'>
+                <img
+                  src={imagePreview}
+                  alt='Preview'
+                  className='w-32 h-32 object-cover rounded border'
+                />
+              </div>
             )}
           </div>
 
@@ -225,8 +267,8 @@ export function CategoryFormDialog({
                   ? 'Đang cập nhật...'
                   : 'Đang tạo...'
                 : isEditing
-                  ? 'Cập nhật'
-                  : 'Tạo mới'}
+                ? 'Cập nhật'
+                : 'Tạo mới'}
             </Button>
           </DialogFooter>
         </form>

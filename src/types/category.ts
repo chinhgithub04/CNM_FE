@@ -9,16 +9,18 @@ export interface Category {
   Status: number;
 }
 
-export interface CategoryCreate {
+// For creating category - backend expects FormData with file upload
+export interface CreateCategoryRequest {
   Name: string;
-  Description?: string;
-  ImageUrl?: string;
+  Description: string;
   Status?: number;
+  Image: File;
 }
 
-export interface CategoryUpdate {
+// For updating category - backend expects FormData with optional file upload
+export interface UpdateCategoryRequest {
   Name?: string;
   Description?: string;
-  ImageUrl?: string;
   Status?: number;
+  Image?: File;
 }
