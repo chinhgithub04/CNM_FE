@@ -280,9 +280,10 @@ export default function ProductDetailPage() {
             {product.Description && (
               <div className='space-y-3 pt-6 border-t'>
                 <h3 className='font-semibold text-lg'>Mô tả sản phẩm:</h3>
-                <p className='text-muted-foreground leading-relaxed'>
-                  {product.Description}
-                </p>
+                <div
+                  className='text-muted-foreground leading-relaxed'
+                  dangerouslySetInnerHTML={{ __html: product.Description }}
+                />
               </div>
             )}
           </div>
