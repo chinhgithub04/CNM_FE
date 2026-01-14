@@ -77,11 +77,12 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className='flex h-screen overflow-hidden bg-gray-100'>
+    <div className='flex overflow-hidden bg-gray-100'>
       {/* Sidebar */}
       <aside
-        className={`${sidebarOpen ? 'w-64' : 'w-0'
-          } flex flex-col border-r bg-white transition-all duration-300 ease-in-out lg:w-64`}
+        className={`${
+          sidebarOpen ? 'w-64' : 'w-0'
+        } flex flex-col border-r bg-white transition-all duration-300 ease-in-out lg:w-64`}
       >
         <div className='flex h-16 items-center justify-between border-b px-6'>
           <h1 className='text-xl font-bold text-gray-900'>Admin Panel</h1>

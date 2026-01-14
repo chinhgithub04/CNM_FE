@@ -15,6 +15,8 @@ import CategoriesPage from './pages/CategoriesPage';
 import ProductsPage from './pages/ProductsPage';
 import CreateProductPage from './pages/CreateProductPage';
 import AccountsPage from './pages/AccountsPage';
+import InvoicesPage from './pages/InvoicesPage';
+import InvoiceDetailPage from './pages/InvoiceDetailPage';
 
 function App() {
   return (
@@ -41,7 +43,8 @@ function App() {
           <Route path='/admin/products/new' element={<CreateProductPage />} />
           <Route path='/admin/products/:id' element={<CreateProductPage />} />
           <Route path='/admin/accounts' element={<AccountsPage />} />
-          {/* <Route path='/admin/invoices' element={<InvoicesPage />} /> */}
+          <Route path='/admin/invoices' element={<InvoicesPage />} />
+          <Route path='/admin/invoices/:id' element={<InvoiceDetailPage />} />
         </Route>
       </Route>
     </Routes>
