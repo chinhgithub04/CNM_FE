@@ -2,9 +2,18 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 const PublicOnlyRoute = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
-  return isAuthenticated ? <Navigate to='/' replace /> : <Outlet />;
+  if (!isAuthenticated) {
+    return <Outlet />;
+  }
+
+  // Redirect based on role
+  if (user?.Role === 'Admin') {
+    return <Navigate to='/admin' replace />;
+  }
+
+  return <Navigate to='/' replace />;
 };
 
 export default PublicOnlyRoute;

@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { loginUser, registerUser } from '@/services/authService';
 import { useAuth as useAuthContext } from '@/contexts/AuthContext';
@@ -12,7 +11,6 @@ import type {
 import type { Response } from '@/types/common';
 
 export const useLogin = () => {
-  const navigate = useNavigate();
   const { setToken, setUser } = useAuthContext();
 
   return useMutation<Response<Token>, Error, LoginRequest>({
@@ -24,7 +22,7 @@ export const useLogin = () => {
         toast.success('Đăng nhập thành công!', {
           description: 'Chào mừng trở lại!',
         });
-        navigate('/');
+        // Navigation will be handled by PublicOnlyRoute based on role
       } else {
         toast.error('Đăng nhập thất bại', {
           description:
@@ -41,7 +39,6 @@ export const useLogin = () => {
 };
 
 export const useRegister = () => {
-  const navigate = useNavigate();
   const { setToken, setUser } = useAuthContext();
 
   const loginMutation = useMutation<
@@ -57,7 +54,7 @@ export const useRegister = () => {
         toast.success('Tạo tài khoản thành công!', {
           description: 'Chào mừng!',
         });
-        navigate('/');
+        // Navigation will be handled by PublicOnlyRoute based on role
       }
     },
   });
