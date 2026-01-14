@@ -4,6 +4,7 @@ export interface LoginRequest {
 }
 
 export interface Token {
+  Id: string;
   FullName: string;
   UserName: string;
   Email: string;
