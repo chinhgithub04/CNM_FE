@@ -22,6 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import ChatWidget from './ChatWidget';
 
 interface NavItem {
   title: string;
@@ -182,6 +183,8 @@ export default function AdminLayout() {
           <Outlet />
         </main>
       </div>
+
+      <ChatWidget />
     </div>
   );
 }
