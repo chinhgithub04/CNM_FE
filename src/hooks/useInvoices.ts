@@ -71,6 +71,9 @@ export const useUpdateInvoice = () => {
       queryClient.invalidateQueries({
         queryKey: ['invoice', 'admin', variables.id],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['invoice', variables.id],
+      });
       toast.success('Cập nhật đơn hàng thành công');
     },
     onError: (error: any) => {

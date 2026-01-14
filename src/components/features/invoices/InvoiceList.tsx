@@ -26,15 +26,23 @@ import { InvoiceStatusLabels, InvoiceStatusColors } from '@/types/invoice';
 
 interface InvoiceListProps {
   invoices: Invoice[];
+  isCustomerView?: boolean;
 }
 
-export function InvoiceList({ invoices }: InvoiceListProps) {
+export function InvoiceList({
+  invoices,
+  isCustomerView = false,
+}: InvoiceListProps) {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   const handleView = (invoiceId: number) => {
-    navigate(`/admin/invoices/${invoiceId}`);
+    if (isCustomerView) {
+      navigate(`/orders/${invoiceId}`);
+    } else {
+      navigate(`/admin/invoices/${invoiceId}`);
+    }
   };
 
   const getStatusBadge = (status: Invoice['Status']) => {

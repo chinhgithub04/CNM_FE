@@ -17,6 +17,8 @@ import CreateProductPage from './pages/CreateProductPage';
 import AccountsPage from './pages/AccountsPage';
 import InvoicesPage from './pages/InvoicesPage';
 import InvoiceDetailPage from './pages/InvoiceDetailPage';
+import CustomerInvoicesPage from './pages/CustomerInvoicesPage';
+import CustomerInvoiceDetailPage from './pages/CustomerInvoiceDetailPage';
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
         <Route path='/cart' element={<CartPage />} />
         <Route path='/checkout' element={<CheckoutPage />} />
         <Route path='/payment-success' element={<PaymentSuccessPage />} />
+        <Route path='/orders' element={<CustomerInvoicesPage />} />
+        <Route path='/orders/:id' element={<CustomerInvoiceDetailPage />} />
         <Route element={<PublicOnlyRoute />}>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
