@@ -41,7 +41,14 @@ export function ProductDetailDialog({
             </div>
             <div>
               <span className='font-semibold'>Mô tả: </span>
-              <span>{product.Description || 'Không có'}</span>
+              {product.Description ? (
+                <div
+                  dangerouslySetInnerHTML={{ __html: product.Description }}
+                  className='prose prose-sm max-w-none mt-2'
+                />
+              ) : (
+                <span>Không có</span>
+              )}
             </div>
             <div>
               <span className='font-semibold'>Danh mục: </span>

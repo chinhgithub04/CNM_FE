@@ -9,7 +9,7 @@ import {
 } from '@/services/productService';
 import type { ProductUpdate } from '@/types/product';
 
-export const useProducts = (page: number = 1, limit: number = 10) => {
+export const useProducts = (page: number = 1, limit: number = 100) => {
   return useQuery({
     queryKey: ['products', page, limit],
     queryFn: () => getProducts(page, limit),
@@ -44,8 +44,13 @@ export const useUpdateProduct = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: ProductUpdate }) =>
-      updateProduct(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: number;
+      data: FormData | ProductUpdate;
+    }) => updateProduct(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
       toast.success('Cập nhật sản phẩm thành công');

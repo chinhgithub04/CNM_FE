@@ -32,11 +32,19 @@ export const createProduct = async (
 
 export const updateProduct = async (
   id: number,
-  data: ProductUpdate
+  data: FormData | ProductUpdate
 ): Promise<Response<Product>> => {
+  const isFormData = data instanceof FormData;
   const response = await apiClient.put<Response<Product>>(
     `/products/${id}`,
-    data
+    data,
+    isFormData
+      ? {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      : undefined
   );
   return response.data;
 };

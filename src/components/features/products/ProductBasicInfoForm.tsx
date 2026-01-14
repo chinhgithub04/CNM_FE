@@ -94,7 +94,7 @@ export function ProductBasicInfoForm({
               Danh mục <span className='text-red-500'>*</span>
             </Label>
             <Select
-              value={categoryId?.toString()}
+              value={categoryId?.toString() || ''}
               onValueChange={onCategoryChange}
             >
               <SelectTrigger>
@@ -112,7 +112,10 @@ export function ProductBasicInfoForm({
 
           <div className='space-y-2'>
             <Label htmlFor='Status'>Trạng thái</Label>
-            <Select value={status?.toString()} onValueChange={onStatusChange}>
+            <Select
+              value={status?.toString() || ''}
+              onValueChange={onStatusChange}
+            >
               <SelectTrigger>
                 <SelectValue placeholder='Chọn trạng thái' />
               </SelectTrigger>

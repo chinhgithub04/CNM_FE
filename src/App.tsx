@@ -38,6 +38,7 @@ function App() {
           <Route path='/admin/categories' element={<CategoriesPage />} />
           <Route path='/admin/products' element={<ProductsPage />} />
           <Route path='/admin/products/new' element={<CreateProductPage />} />
+          <Route path='/admin/products/:id' element={<CreateProductPage />} />
           {/* <Route path='/admin/accounts' element={<AccountsPage />} />
           <Route path='/admin/invoices' element={<InvoicesPage />} /> */}
         </Route>
